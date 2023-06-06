@@ -8,7 +8,7 @@ namespace CBALoginChecker
         {
             try
             {
-                var loginVerifierObj = new LoginVerifier();
+                var loginVerifierObj = new LoginVerifier(@"e:\loginfile.txt");
 
                 Console.Write("Please enter your username: ");
                 var uname = Console.ReadLine();

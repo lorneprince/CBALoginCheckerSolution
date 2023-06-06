@@ -1,29 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CBALoginChecker
 {
     public class LoginVerifier
     {
+        public string LoginFilePath { get; set; }
+
+        public LoginVerifier() { }
+
+        public LoginVerifier(string filePath) 
+        {
+            LoginFilePath = filePath;
+        }
+
         public bool IsLoginValid(string username, string password)
         {
-            bool unameReadFromFile = false;
-            string fileName = @"e:\loginfile.txt";
+            bool unameReadFromFile = false;            
 
             try
             {
-                using (StreamReader reader = new StreamReader(fileName))
+                if (string.IsNullOrEmpty(LoginFilePath))
                 {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
+                    throw new Exception("Login file path is undefined. Please set the \"LoginFilePath\" property.");
+                }
+
+                using (StreamReader reader = new StreamReader(LoginFilePath))
+                {
+                    string fileData;
+                    while ((fileData = reader.ReadLine()) != null)
                     {
                         if (!unameReadFromFile)
                         {
-                            if (line.ToLower() != username.ToLower())
+                            if (fileData.ToLower() != username.ToLower())
                             {
                                 // the username doesn't match so login failed
                                 return false;
@@ -32,7 +41,7 @@ namespace CBALoginChecker
                             continue;
                         }
 
-                        if (line != password)
+                        if (fileData != password)
                         {
                             return false;
                         }
